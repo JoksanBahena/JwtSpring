@@ -16,7 +16,7 @@ public class UserInfoService implements UserDetailsService {
     @Autowired
     private UserInfoRepository userInfoRepository;
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder; 
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -25,5 +25,13 @@ public class UserInfoService implements UserDetailsService {
                 .orElseThrow(
                         () -> new UsernameNotFoundException("Usuario no encontrado")
                 );
+    }
+
+    public String saveUser(UserInfo userInfo) {
+        userInfo.setPassword(passwordEncoder.encode(userInfo.getPassword()));
+        userInfo.setNonLocked(true);
+        userInfoRepository.save(userInfo);
+
+        return "Usuario registrado correctamente";
     }
 }
